@@ -13,7 +13,8 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
 ## 📂 Estructura del Proyecto
 
 *   `docker-compose.yml`: Configuración de los servicios de Docker (MySQL, WordPress, Cloudflare Tunnel).
-*   `src/`: Directorio que contiene el núcleo de WordPress (`wp-admin`, `wp-content`, etc.).
+*   `database.sql`: Exportación de la base de datos con todo el contenido del sitio (páginas, posts, usuarios, configuración).
+*   `src/`: Directorio con los archivos de WordPress (temas, plugins, uploads, etc.).
 *   `uploads.ini`: Configuración personalizada de PHP para la subida de archivos.
 
 ## 🛠️ Instalación y Uso
