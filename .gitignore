@@ -32,9 +32,6 @@ yarn-error.log*
 Thumbs.db
 
 # Misc
-uploads.ini
-docker-compose.yml
-page.html
 
 
 src/.htaccess

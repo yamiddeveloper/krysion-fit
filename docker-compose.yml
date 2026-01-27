@@ -1,0 +1,58 @@
+services:
+  # 1️⃣ MySQL
+  db:
+    image: mysql:8.0
+    container_name: wp_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wpnet
+
+  # 2️⃣ WordPress
+  wordpress:
+    image: wordpress:6.6-php8.3-apache
+    container_name: wp_app
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_pass
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "8080:80"
+    volumes:
+      - wp_data:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    command: >
+      sh -c "docker-php-ext-install pdo pdo_mysql && a2enmod rewrite && apache2-foreground"
+    networks:
+      - wpnet
+
+  # 3️⃣ Cloudflare Tunnel
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    # AQUÍ EL CAMBIO: Usamos 'wordpress' que es el nombre del servicio
+    command: tunnel --no-autoupdate --protocol http2 --url http://wordpress:80
+    restart: always
+    networks:
+      - wpnet  # IMPORTANTE: Para que el túnel llegue a WordPress
+
+volumes:
+  wp_data:
+    external: true
+    name: krysion-fit_wp_data
+  db_data:
+    external: true
+    name: krysion-fit_db_data
+
+networks:
+  wpnet:
+    driver: bridge # Aseguramos que la red exista
