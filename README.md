@@ -8,11 +8,11 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
 *   **WordPress**: Sistema de gestión de contenidos (CMS) principal.
 *   **Docker & Docker Compose**: Orquestación de contenedores para la base de datos, la aplicación y el túnel.
 *   **MySQL**: Base de datos para WordPress.
-*   **Cloudflare Tunnel**: Para exponer la aplicación de forma segura a internet.
+*   **Cloudflare Tunnel**: Para exponer la aplicación de forma segura a internet (sin necesidad de token).
 
 ## 📂 Estructura del Proyecto
 
-*   `docker-compose.yml`: Configuración de los servicios de Docker (base de datos, WordPress, túnel de Cloudflare).
+*   `docker-compose.yml`: Configuración de los servicios de Docker (MySQL, WordPress, Cloudflare Tunnel).
 *   `src/`: Directorio que contiene el núcleo de WordPress (`wp-admin`, `wp-content`, etc.).
 *   `uploads.ini`: Configuración personalizada de PHP para la subida de archivos.
 
@@ -21,7 +21,6 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
 ### Prerrequisitos
 
 *   Docker y Docker Compose instalados en tu sistema.
-*   Token de Cloudflare Tunnel configurado en el `docker-compose.yml`.
 
 ### Pasos para levantar el proyecto
 
@@ -33,16 +32,27 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
     docker-compose up -d
     ```
 
-4.  Accede al sitio a través del **túnel de Cloudflare** (no por localhost):
+4.  Obtén la URL pública del túnel ejecutando:
 
-    *   **URL del sitio**: [https://krysionfit.com](https://krysionfit.com) (o el dominio configurado en tu túnel)
+    ```bash
+    docker-compose logs tunnel
+    ```
 
-> ⚠️ **Nota**: El acceso local por `localhost:8080` no está habilitado. Todo el tráfico pasa por el túnel seguro de Cloudflare.
+5.  Busca en los logs la línea que contiene la URL (entre `---`), por ejemplo:
+
+    ```
+    -------------------------------------------
+    https://random-subdomain.trycloudflare.com
+    -------------------------------------------
+    ```
+
+6.  Accede al sitio usando esa URL.
 
 ### Gestión de Contenedores
 
 *   **Detener los servicios**: `docker-compose down`
-*   **Ver logs**: `docker-compose logs -f`
+*   **Ver logs en tiempo real**: `docker-compose logs -f`
+*   **Ver solo logs del túnel**: `docker-compose logs tunnel`
 
 ## 👤 Autor
 
