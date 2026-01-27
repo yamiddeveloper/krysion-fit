@@ -32,7 +32,7 @@ yarn-error.log*
 Thumbs.db
 
 # Misc
-
+page.html
 
 src/.htaccess
 src/.tmb/

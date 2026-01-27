@@ -4,16 +4,15 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
 
 ## 🚀 Tecnologías
 
-*   **HTML/CSS/JS**: Para la landing page y personalizaciones del frontend.
+*   **HTML/CSS/JS**: Para personalizaciones del frontend.
 *   **WordPress**: Sistema de gestión de contenidos (CMS) principal.
 *   **Docker & Docker Compose**: Orquestación de contenedores para la base de datos, la aplicación y el túnel.
 *   **MySQL**: Base de datos para WordPress.
-*   **Cloudflare Tunnel**: Para exponer la aplicación de forma segura.
+*   **Cloudflare Tunnel**: Para exponer la aplicación de forma segura a internet.
 
 ## 📂 Estructura del Proyecto
 
-*   `docker-compose.yml`: Configuración de los servicios de Docker (base de datos, WordPress, túnel).
-*   `page.html`: Landing page estática con el diseño principal del sitio (Hero, Planes, Coach, etc.).
+*   `docker-compose.yml`: Configuración de los servicios de Docker (base de datos, WordPress, túnel de Cloudflare).
 *   `src/`: Directorio que contiene el núcleo de WordPress (`wp-admin`, `wp-content`, etc.).
 *   `uploads.ini`: Configuración personalizada de PHP para la subida de archivos.
 
@@ -22,6 +21,7 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
 ### Prerrequisitos
 
 *   Docker y Docker Compose instalados en tu sistema.
+*   Token de Cloudflare Tunnel configurado en el `docker-compose.yml`.
 
 ### Pasos para levantar el proyecto
 
@@ -33,10 +33,11 @@ Krysion Fit es una plataforma de asesoría de fitness online 100% personalizada.
     docker-compose up -d
     ```
 
-4.  Accede al sitio en tu navegador:
+4.  Accede al sitio a través del **túnel de Cloudflare** (no por localhost):
 
-    *   **WordPress Local**: [http://localhost:8080](http://localhost:8080)
-    *   **Landing Page (Diseño)**: Abre el archivo `page.html` en tu navegador.
+    *   **URL del sitio**: [https://krysionfit.com](https://krysionfit.com) (o el dominio configurado en tu túnel)
+
+> ⚠️ **Nota**: El acceso local por `localhost:8080` no está habilitado. Todo el tráfico pasa por el túnel seguro de Cloudflare.
 
 ### Gestión de Contenedores
 
