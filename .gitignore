@@ -34,5 +34,10 @@ Thumbs.db
 # Misc
 uploads.ini
 docker-compose.yml
-README.md
 page.html
+
+
+src/.htaccess
+src/.tmb/
+src/src/
+src/wp-config.php
