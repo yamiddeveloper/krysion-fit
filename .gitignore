@@ -1,0 +1,38 @@
+# WordPress Core
+src/wp-admin/
+src/wp-includes/
+src/*.php
+!src/wp-config.php
+src/license.txt
+src/readme.html
+src/xmlrpc.php
+
+# WordPress Content
+src/wp-content/*
+!src/wp-content/themes/
+!src/wp-content/plugins/
+
+# Ignore all themes except hello-elementor
+src/wp-content/themes/*
+!src/wp-content/themes/hello-elementor/
+
+# Ignore all plugins (add specific ones if needed)
+src/wp-content/plugins/*
+
+# Environment and Config
+.env
+docker-compose.override.yml
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Misc
+uploads.ini
+docker-compose.yml
+README.md
+page.html
