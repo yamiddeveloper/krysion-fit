@@ -174,7 +174,7 @@ nav .btn-area:hover {
 }
 
 .hero h1{
-  font-size:clamp(3rem, 5vw + 1rem, 4.8rem);
+  font-size:clamp(2rem, 5vw + 1rem, 4.8rem);
   font-weight:800;
   line-height:1.05;
   letter-spacing:-0.03em;
@@ -823,15 +823,26 @@ footer a:hover{
       </div>
     </div>
 
-    <div class="coach-card">
-      <div class="coach-inner">
-        <div class="coach-tag"><span></span> Head Coach</div>
-        <img src="/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-13-at-1.18.38-AM.jpeg"
-             alt="Freddy Zapata - Entrenador Certificado">
-        <h3>Freddy Zapata</h3>
-        <p>Entrenador certificado · Especialista en recomposición corporal</p>
-        <p class="coach-note">Más de 80 alumnos guiados en procesos de cambio físico sostenible.</p>
-        <a href="#" target="_blank" class="btn-small">Ver certificado</a>
+    <div>
+      <div class="coach-card">
+        <div class="coach-inner">
+          <div class="coach-tag"><span></span> Head Coach</div>
+          <img src="/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-13-at-1.18.38-AM.jpeg"
+               alt="Freddy Zapata - Entrenador Certificado">
+          <h3>Freddy Zapata</h3>
+          <p>Experto en recomposición corporal y perdida de peso</p>
+          <a href="/wp-content/uploads/2026/01/INSTRUCTORADO-PERSONAL-TRAINER-Y-MUSCULACION-1.pdf" target="_blank" class="btn-small">Ver certificado</a>
+        </div>
+      </div>
+      <div class="coach-card" style="margin-top: 20px;">
+        <div class="coach-inner">
+          <div class="coach-tag"><span></span> Coach</div>
+          <img src="/wp-content/uploads/2026/01/entrenador-2.jpeg"
+               alt="Entrenador Krysion Fit">
+          <h3>Anthony Vargas</h3>
+          <p>Experto en entrenamiento funcional</p>
+          <a href="https://www.instagram.com/daddithoni?igsh=MTkwanhxbTN3eTQyNA==" target="_blank" class="btn-small">Ver perfil</a>
+        </div>
       </div>
     </div>
   </div>

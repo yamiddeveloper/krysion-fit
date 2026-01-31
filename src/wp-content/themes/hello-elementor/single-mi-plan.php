@@ -18,7 +18,10 @@ if (is_numeric($cliente_asignado)) { $id_cliente_plan = $cliente_asignado; }
 elseif (is_array($cliente_asignado) && isset($cliente_asignado['ID'])) { $id_cliente_plan = $cliente_asignado['ID']; } 
 elseif (is_object($cliente_asignado) && isset($cliente_asignado->ID)) { $id_cliente_plan = $cliente_asignado->ID; }
 
-if (!is_user_logged_in()) { auth_redirect(); exit; }
+if (!is_user_logged_in()) { 
+    header("Location: /encuesta/login.php"); 
+    exit; 
+}
 if (!$es_coach && (int)$id_cliente_plan !== (int)$current_user_id) { wp_redirect(home_url()); exit; }
 
 // 3. CÁLCULO DE LAS 24 HORAS (CRONÓMETRO)
@@ -59,20 +62,31 @@ if ( $es_coach ) {
     if ( isset($_POST['action']) && $_POST['action'] == 'kf_save_full_plan' ) {
         $dias_slugs = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
         for ($w = 1; $w <= $total_semanas; $w++) {
+            // Sincronizar entrenamiento hacia ACF
             if (isset($_POST['entrenamiento'][$w])) {
                 $data_ent = [];
                 foreach ($dias_slugs as $slug) {
                     $data_ent[$slug] = sanitize_text_field($_POST['entrenamiento'][$w][$slug]['t']);
                     $data_ent['descripcion_' . $slug] = wp_kses_post($_POST['entrenamiento'][$w][$slug]['d']);
+                    
+                    // Guardar en campo ACF individual (rutina_lunes, rutina_martes, etc.)
+                    update_field('rutina_' . $slug, $data_ent[$slug], $post_id);
                 }
+                // También guardar en campo de semana para compatibilidad
                 update_field("semana_$w", $data_ent, $post_id);
             }
+            
+            // Sincronizar nutrición hacia ACF
             if (isset($_POST['nutricion'][$w])) {
                 $data_nut = [];
                 foreach ($dias_slugs as $slug) {
                     $data_nut[$slug] = sanitize_text_field($_POST['nutricion'][$w][$slug]['t']);
                     $data_nut['descripcion_' . $slug] = wp_kses_post($_POST['nutricion'][$w][$slug]['d']);
+                    
+                    // Guardar en campo ACF individual si existe
+                    update_field('nutricion_' . $slug, $data_nut[$slug], $post_id);
                 }
+                // También guardar en campo de nutrición de semana
                 update_field("nutricion_$w", $data_nut, $post_id);
             }
         }
@@ -114,7 +128,7 @@ $consejos_html = get_field('consejos_coach', $post_id) ?: 'Escribe aquí los con
   .nav-btn { background: var(--kf-card); border: 1px solid var(--kf-line); color: var(--kf-gray); padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: 700; transition: 0.3s; }
   .nav-btn:hover{ background: var(--primary); }
   .nav-btn.active { background: var(--kf-orange); color: white; border-color: var(--kf-orange); }
-  .kf-nav-weeks { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
+  .kf-nav-weeks { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; margin-top: 30px; }
   .week-btn { background: var(--kf-card); border: 1px solid var(--kf-line); color: var(--kf-gray); padding: 8px 18px; border-radius: 50px; cursor: pointer; font-size: 12px; font-weight: 600; }
   .week-btn.active { color: var(--kf-orange); border-color: var(--kf-orange); }
   .week-btn:hover{background: var(--primary); }
@@ -510,6 +524,111 @@ $consejos_html = get_field('consejos_coach', $post_id) ?: 'Escribe aquí los con
   .edit-t { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 5px; outline: none; }
   .edit-d { font-size: 13px; color: #bbb; line-height: 1.6; outline: none; min-height: 20px; }
   .is-hidden { display: none !important; }
+
+  /* ESTILOS DE TÍTULO DE SEMANA */
+  .kf-week-title-section {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  .kf-week-title {
+    font-size: 2rem !important;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    padding: 20px 0;
+    border-bottom: 2px solid var(--kf-line);
+    position: relative;
+  }
+  .kf-week-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: var(--kf-orange);
+  }
+
+  /* ESPACIADO ADICIONAL PARA SECCIONES */
+  .mod-content {
+    margin-bottom: 40px;
+    padding-top: 20px;
+  }
+
+  /* ESTILOS DE PLAN GENERAL */
+  .kf-plan-general-card {
+      background: var(--kf-card);
+      border: 1px solid var(--kf-line);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+  }
+  .kf-plan-general-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--kf-orange) 0%, #ff8c42 100%);
+  }
+  .kf-plan-general-header {
+      margin-bottom: 20px;
+  }
+  .kf-plan-general-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+  }
+  .kf-plan-general-icon {
+      font-size: 24px;
+      filter: drop-shadow(0 2px 4px rgba(242, 96, 12, 0.3));
+  }
+  .kf-plan-general-title h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+  .kf-plan-general-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+  }
+  .kf-plan-general-item {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+  }
+  .kf-plan-general-item:hover {
+      background: rgba(242, 96, 12, 0.05);
+      border-color: rgba(242, 96, 12, 0.2);
+      transform: translateY(-2px);
+  }
+  .kf-plan-general-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--kf-orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+  }
+  .kf-plan-general-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+  }
 
   /* ESTILOS DE SEGUIMIENTO (LOGS) */
   .kf-log-container { margin-top: 30px; border-top: 1px solid var(--kf-line); padding-top: 25px; }
@@ -1014,7 +1133,12 @@ $consejos_html = get_field('consejos_coach', $post_id) ?: 'Escribe aquí los con
                     <span style="font-weight:800; font-size:10px; color:var(--kf-orange);">MODO EDICIÓN</span>
                     <h3 style="margin:0; font-size:16px; color:#fff;">Gestión del Plan</h3>
                 </div>
-                <div style="font-size:12px; color:var(--kf-gray);">Cambios globales activos</div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button type="button" class="btn-sync-acf" onclick="guardarHaciaACF()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 50px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+                        � Guardar en ACF
+                    </button>
+                    <div style="font-size:12px; color:var(--kf-gray);">Cambios globales activos</div>
+                </div>
             </div>
             <?php endif; ?>
 
@@ -1072,8 +1196,18 @@ $consejos_html = get_field('consejos_coach', $post_id) ?: 'Escribe aquí los con
                     <button class="nav-btn" id="btn-nut" onclick="switchMod('nutricion')">🥗 NUTRICIÓN</button>
                 </div>
                 <div class="kf-nav-weeks">
-                    <?php for($i=1; $i<=$total_semanas; $i++): ?>
-                        <button class="week-btn <?php echo ($i==1)?'active':''; ?>" data-week="<?php echo $i; ?>" onclick="switchWeek(<?php echo $i; ?>)">Semana <?php echo $i; ?></button>
+                    <?php 
+                    $titulos_semanas = [
+                        1 => 'Semana 1 – Adaptación',
+                        2 => 'Semana 2 – Consolidación inicial', 
+                        3 => 'Semana 3 – Primeros cambios visibles',
+                        4 => 'Semana 4 – Resultados parciales',
+                        5 => 'Semana 5 – Máximo rendimiento',
+                        6 => 'Semana 6 – Definición final'
+                    ];
+                    for($i=1; $i<=$total_semanas; $i++): 
+                    ?>
+                        <button class="week-btn <?php echo ($i==1)?'active':''; ?>" data-week="<?php echo $i; ?>" onclick="switchWeek(<?php echo $i; ?>)"><?php echo $titulos_semanas[$i]; ?></button>
                     <?php endfor; ?>
                 </div>
             </div>
@@ -1084,8 +1218,14 @@ $consejos_html = get_field('consejos_coach', $post_id) ?: 'Escribe aquí los con
                         <?php for ($w = 1; $w <= $total_semanas; $w++): ?>
                             
                             <div id="week-ent-<?php echo $w; ?>" class="mod-content mod-ent <?php echo ($w > 1) ? 'is-hidden' : ''; ?>">
+                                <!-- Título de la Semana -->
+                                <div class="kf-week-title-section">
+                                    <h2 class="kf-week-title"><?php echo $titulos_semanas[$w]; ?></h2>
+                                </div>
+                                
                                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:15px;">
                                     <?php 
+                                    // Obtener datos directamente de los campos ACF individuales
                                     $plan = get_field("semana_$w", $post_id);
                                     foreach($slugs_dias as $idx => $slug): 
                                         $completado = get_post_meta($post_id, "completado_{$w}_{$slug}", true); // Lógica de chulito
@@ -1127,6 +1267,39 @@ $consejos_html = get_field('consejos_coach', $post_id) ?: 'Escribe aquí los con
                             </div>
 
                             <div id="week-nut-<?php echo $w; ?>" class="mod-content mod-nut is-hidden">
+                                <!-- Título de la Semana -->
+                                <div class="kf-week-title-section">
+                                    <h2 class="kf-week-title"><?php echo $titulos_semanas[$w]; ?></h2>
+                                </div>
+                                
+                                <!-- Nutrición - Plan General -->
+                                <div class="kf-plan-general-card">
+                                    <div class="kf-plan-general-header">
+                                        <div class="kf-plan-general-title">
+                                            <span class="kf-plan-general-icon">🥗</span>
+                                            <h3>NUTRICIÓN - PLAN GENERAL</h3>
+                                        </div>
+                                    </div>
+                                    <div class="kf-plan-general-grid">
+                                        <div class="kf-plan-general-item">
+                                            <div class="kf-plan-general-label">CALORÍAS</div>
+                                            <div class="kf-plan-general-value">2500 kcal</div>
+                                        </div>
+                                        <div class="kf-plan-general-item">
+                                            <div class="kf-plan-general-label">PROTEÍNAS</div>
+                                            <div class="kf-plan-general-value">150g</div>
+                                        </div>
+                                        <div class="kf-plan-general-item">
+                                            <div class="kf-plan-general-label">CARBOHIDRATOS</div>
+                                            <div class="kf-plan-general-value">250g</div>
+                                        </div>
+                                        <div class="kf-plan-general-item">
+                                            <div class="kf-plan-general-label">GRASAS</div>
+                                            <div class="kf-plan-general-value">85g</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:15px;">
                                     <?php 
                                     $plan_nut = get_field("nutricion_$w", $post_id);
@@ -1549,6 +1722,19 @@ function selectDay(daySlug, dayName, element) {
     
     // Si ya estaba activo, lo desactivamos y ocultamos el seguimiento
     if (isAlreadyActive) {
+        hideTracking();
+        return;
+    }
+
+    // Verificar si es día de descanso
+    const titleEl = element.querySelector('.edit-t');
+    const descEl = element.querySelector('.edit-d');
+    const title = titleEl ? (titleEl.innerText || titleEl.textContent || "").trim() : "";
+    const desc = descEl ? (descEl.innerText || descEl.textContent || "").trim() : "";
+    
+    // Si es día de descanso (título es "Descanso" y no hay descripción), no mostrar seguimiento
+    if (title.toLowerCase() === 'descanso' && !desc) {
+        // Ocultar cualquier seguimiento activo
         hideTracking();
         return;
     }
@@ -2289,6 +2475,118 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
     initApp();
+}
+
+/**
+ * Función para guardar datos hacia ACF
+ */
+function guardarHaciaACF() {
+    if (!KF_STATE.isCoach) {
+        alert('Solo los coaches pueden guardar datos.');
+        return;
+    }
+    
+    const btn = document.querySelector('.btn-sync-acf');
+    if (btn) {
+        btn.textContent = '⏳ Guardando...';
+        btn.disabled = true;
+    }
+    
+    // Recolectar todos los datos de la plantilla
+    const planData = {};
+    const diasSlugs = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+    
+    // Recorrer todas las semanas
+    for (let w = 1; w <= KF_STATE.totalWeeks; w++) {
+        const weekData = {};
+        const nutData = {};
+        
+        // Recorrer todos los días de la semana
+        diasSlugs.forEach(slug => {
+            // Buscar las tarjetas de entrenamiento
+            const entCard = document.querySelector(`[data-type="ent"][data-week="${w}"][data-day="${slug}"]`);
+            if (entCard) {
+                const titleEl = entCard.querySelector('.edit-t[data-field="t"]');
+                const descEl = entCard.querySelector('.edit-d[data-field="d"]');
+                
+                if (titleEl) {
+                    const titleValue = titleEl.innerText || titleEl.textContent || 'Descanso';
+                    weekData[slug] = titleValue;
+                    console.log(`Found ${slug} title:`, titleValue);
+                }
+                if (descEl) {
+                    const descValue = descEl.innerHTML || '';
+                    weekData['descripcion_' + slug] = descValue;
+                    console.log(`Found ${slug} desc:`, descValue);
+                }
+            } else {
+                console.log(`No ent card found for week ${w}, day ${slug}`);
+            }
+            
+            // Buscar las tarjetas de nutrición
+            const nutCard = document.querySelector(`[data-type="nut"][data-week="${w}"][data-day="${slug}"]`);
+            if (nutCard) {
+                const titleEl = nutCard.querySelector('.edit-t[data-field="t"]');
+                const descEl = nutCard.querySelector('.edit-d[data-field="d"]');
+                
+                if (titleEl) {
+                    const titleValue = titleEl.innerText || titleEl.textContent || 'Plan Dieta';
+                    nutData[slug] = titleValue;
+                    console.log(`Found nut ${slug} title:`, titleValue);
+                }
+                if (descEl) {
+                    const descValue = descEl.innerHTML || '';
+                    nutData['descripcion_' + slug] = descValue;
+                    console.log(`Found nut ${slug} desc:`, descValue);
+                }
+            } else {
+                console.log(`No nut card found for week ${w}, day ${slug}`);
+            }
+        });
+        
+        planData[`semana_${w}`] = weekData;
+        planData[`nutricion_${w}`] = nutData;
+    }
+    
+    console.log('Complete plan data to send:', planData);
+    
+    // Obtener consejos del coach
+    const consejosEl = document.querySelector('#consejos-coach');
+    if (consejosEl) {
+        planData.consejos_coach = consejosEl.innerHTML || '';
+    }
+    
+    // Realizar petición AJAX para guardar hacia ACF
+    fetch(KF_STATE.ajaxUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            action: 'kf_save_to_acf',
+            post_id: KF_STATE.postId,
+            plan_data: JSON.stringify(planData),
+            nonce: '<?php echo wp_create_nonce('kf_save_acf'); ?>'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Datos guardados correctamente en ACF');
+        } else {
+            alert('Error al guardar: ' + (data.message || 'Error desconocido'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexión al guardar');
+    })
+    .finally(() => {
+        if (btn) {
+            btn.textContent = '💾 Guardar en ACF';
+            btn.disabled = false;
+        }
+    });
 }
 </script>
 

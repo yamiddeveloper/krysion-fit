@@ -11,13 +11,23 @@ services:
       MYSQL_ROOT_PASSWORD: root_pass
     volumes:
       - db_data:/var/lib/mysql
-      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      #- ./database.sql:/docker-entrypoint-initdb.d/database.sql
     networks:
       - wpnet
+    # ⚡ Optimizaciones MySQL
+    #command: >
+    #  --innodb_buffer_pool_size=256M
+    #  --innodb_log_file_size=64M
+    #  --innodb_flush_log_at_trx_commit=2
+    #  --innodb_flush_method=O_DIRECT
+    #  --max_connections=100
+    #  --skip-name-resolve
 
   # 2️⃣ WordPress
   wordpress:
-    image: wordpress:6.6-php8.3-apache
+    build:
+      context: .
+      dockerfile: Dockerfile.wordpress
     container_name: wp_app
     restart: unless-stopped
     depends_on:
@@ -27,28 +37,53 @@ services:
       WORDPRESS_DB_USER: wp_user
       WORDPRESS_DB_PASSWORD: wp_pass
       WORDPRESS_DB_NAME: wordpress
+      # ⚡ Optimizaciones WP
+      # WORDPRESS_CONFIG_EXTRA: |
+        #define('WP_CACHE', true);
+        #define('DISABLE_WP_CRON', true);
+        #define('WP_POST_REVISIONS', 3);
+        #define('AUTOSAVE_INTERVAL', 300);
+        #if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+        #  $$_SERVER['HTTPS'] = 'on';
+        #}
+        #$$kf_proto = (!empty($$_SERVER['HTTP_X_FORWARDED_PROTO']) ? $$_SERVER['HTTP_X_FORWARDED_PROTO'] : 'http');
+        #$$kf_host = (!empty($$_SERVER['HTTP_X_FORWARDED_HOST']) ? $$_SERVER['HTTP_X_FORWARDED_HOST'] : (!empty($$_SERVER['HTTP_HOST']) ? $$_SERVER['HTTP_HOST'] : 'localhost'));
+        #if (!defined('WP_HOME')) {
+        #  define('WP_HOME', $$kf_proto . '://' . $$kf_host);
+        #}
+        #if (!defined('WP_SITEURL')) {
+        #  define('WP_SITEURL', $$kf_proto . '://' . $$kf_host);
+        #}
     ports:
       - "8080:80"
     volumes:
-      - ./src:/var/www/html
-      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-    command: >
-      sh -c "docker-php-ext-install pdo pdo_mysql && a2enmod rewrite && apache2-foreground"
+      - wp_data:/var/www/html
+      #- ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      #- ./wp-performance.ini:/usr/local/etc/php/conf.d/wp-performance.ini
     networks:
       - wpnet
 
   # 3️⃣ Cloudflare Tunnel
   tunnel:
     image: cloudflare/cloudflared:latest
-    # AQUÍ EL CAMBIO: Usamos 'wordpress' que es el nombre del servicio
     command: tunnel --no-autoupdate --protocol http2 --url http://wordpress:80
     restart: always
+    depends_on:
+      - wordpress
     networks:
-      - wpnet # IMPORTANTE: Para que el túnel llegue a WordPress
+      - wpnet
+
+  # 4️⃣ Redis (NUEVO - caché de objetos)
+  #redis:
+    #image: redis:alpine
+    #container_name: wp_redis
+    #restart: unless-stopped
+    #networks:
+      #- wpnet
 
 volumes:
   db_data:
-
+  wp_data:
 
 networks:
   wpnet:

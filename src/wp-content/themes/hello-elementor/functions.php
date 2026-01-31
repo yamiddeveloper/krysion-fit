@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+// Incluir el handler de sincronización ACF
+require_once __DIR__ . '/acf-sync-handler.php';
+
 define( 'HELLO_ELEMENTOR_VERSION', '3.4.5' );
 define( 'EHP_THEME_SLUG', 'hello-elementor' );
 
@@ -313,6 +316,36 @@ function krysion_protect_specific_pages() {
             exit;
         }
     }
+}
+
+/**
+ * REDIRECCIÓN AL CERRAR SESIÓN: Sistema personalizado
+ */
+// 1. Crear una URL de logout personalizada
+add_filter('logout_url', 'krysion_custom_logout_url', 999, 2);
+
+function krysion_custom_logout_url($logout_url, $redirect) {
+    // Siempre usar nuestra URL personalizada para todos los enlaces de logout
+    return home_url('/encuesta/logout.php');
+}
+
+// 2. Procesar el logout personalizado
+add_action('init', 'krysion_handle_custom_logout');
+
+function krysion_handle_custom_logout() {
+    if (isset($_GET['krysion_logout']) && $_GET['krysion_logout'] == '1') {
+        wp_logout();
+        wp_safe_redirect(home_url('/encuesta/login.php'));
+        exit();
+    }
+}
+
+// 3. Resaldo por si acaso
+add_action('wp_logout', 'krysion_logout_redirect_action');
+
+function krysion_logout_redirect_action() {
+    wp_safe_redirect(home_url('/encuesta/login.php'));
+    exit();
 }
 
 /**
@@ -622,4 +655,43 @@ function kf_handle_chat_msg() {
         wp_send_json_success();
     }
     wp_send_json_error();
+}
+
+// Obtener datos de encuesta (goal y activity_level) por correo
+add_action('wp_ajax_kf_get_user_survey_data', 'kf_get_user_survey_data');
+
+function kf_get_user_survey_data() {
+    global $wpdb;
+
+    if ( ! is_user_logged_in() || ! current_user_can('administrator') ) {
+        wp_send_json_error(['error' => 'No autorizado']);
+    }
+
+    if ( empty($_GET['email']) ) {
+        wp_send_json_error(['error' => 'Email parameter missing']);
+    }
+
+    $email = sanitize_email( wp_unslash($_GET['email']) );
+    if ( empty($email) ) {
+        wp_send_json_error(['error' => 'Invalid email']);
+    }
+
+    $table = 'planes_personalizados';
+
+    $row = $wpdb->get_row(
+        $wpdb->prepare(
+            "SELECT goal, activity_level FROM {$table} WHERE email = %s ORDER BY created_at DESC LIMIT 1",
+            $email
+        ),
+        ARRAY_A
+    );
+
+    if ( empty($row) ) {
+        wp_send_json_error(['error' => 'User not found']);
+    }
+
+    wp_send_json_success([
+        'goal' => $row['goal'] ?? null,
+        'activity_level' => $row['activity_level'] ?? null,
+    ]);
 }

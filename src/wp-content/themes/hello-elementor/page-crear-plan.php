@@ -29,6 +29,17 @@ if ( isset($_POST['action']) && $_POST['action'] == 'kf_approve_user' ) {
     }
 }
 
+// LÓGICA PARA CAMBIAR ESTADO A NO APROBADO
+if ( isset($_POST['action']) && $_POST['action'] == 'kf_disapprove_user' ) {
+    $user_id = intval($_POST['user_id']);
+    
+    if ($user_id && current_user_can('administrator')) {
+        update_user_meta($user_id, 'kf_user_approval', 'pending');
+        wp_redirect(home_url('/planes-de-entrenamiento-y-nutricion/?disapproved=1'));
+        exit;
+    }
+}
+
 // LÓGICA DE OMITIR ESPERA (BYPASS)
 if ( isset($_POST['action']) && $_POST['action'] == 'kf_toggle_bypass' ) {
     $plan_id = intval($_POST['plan_id']);
@@ -198,6 +209,20 @@ get_header();
   }
   .btn-approve:hover { background: #218838; transform: translateY(-1px); }
 
+  .btn-disapprove { 
+    background: #dc3545; 
+    color: #fff; 
+    padding: 8px 12px; 
+    border-radius: 6px; 
+    font-size: 11px; 
+    font-weight: 800; 
+    border: none; 
+    cursor: pointer; 
+    transition: 0.3s;
+    text-transform: uppercase;
+  }
+  .btn-disapprove:hover { background: #c82333; transform: translateY(-1px); }
+
   .user-meta-info { font-size: 11px; color: #888; margin-top: 4px; }
 
   .btn-bypass {
@@ -219,6 +244,67 @@ get_header();
   .btn-bypass.is-active { background: #ffc107; color: #000; }
   .btn-bypass:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
+  /* ESTILOS DE PAGINACIÓN */
+  .pagination-wrapper {
+    padding: 20px;
+    border-top: 1px solid var(--kf-line);
+    background: #1a1a1a;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    background: #000;
+    border: 1px solid var(--kf-line);
+    color: var(--kf-gray);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+  
+  .pagination-btn:hover {
+    background: var(--kf-orange);
+    color: #fff;
+    border-color: var(--kf-orange);
+    transform: translateY(-1px);
+  }
+  
+  .pagination-btn.active {
+    background: var(--kf-orange);
+    color: #fff;
+    border-color: var(--kf-orange);
+    font-weight: 700;
+  }
+  
+  .pagination-btn.prev-btn,
+  .pagination-btn.next-btn {
+    min-width: auto;
+    padding: 0 16px;
+    font-size: 11px;
+  }
+  
+  .pagination-dots {
+    color: var(--kf-gray);
+    padding: 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 900px) { 
     .grid-coach { grid-template-columns: 1fr; }
@@ -231,6 +317,9 @@ get_header();
   @media (max-width: 600px) {
     .coach-header { flex-direction: column; gap: 10px; text-align: center; }
     .coach-welcome h1 { font-size: 20px; }
+    .pagination { gap: 6px; }
+    .pagination-btn { min-width: 32px; height: 32px; font-size: 11px; padding: 0 8px; }
+    .pagination-btn.prev-btn, .pagination-btn.next-btn { padding: 0 12px; font-size: 10px; }
   }
 </style>
 
@@ -262,12 +351,34 @@ get_header();
       </style>
     <?php endif; ?>
 
+    <?php if (isset($_GET['disapproved'])) : ?>
+      <div id="disapprove-success" style="background: rgba(220, 53, 69, 0.15); border: 1px solid #dc3545; color: #dc3545; padding: 15px 20px; border-radius: 12px; margin-bottom: 30px; display: flex; align-items: center; gap: 12px; animation: slideDown 0.4s ease-out;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span style="font-weight: 700; font-size: 14px;">¡USUARIO DESACTIVADO CORRECTAMENTE!</span>
+      </div>
+      <script>
+        setTimeout(() => {
+          document.getElementById('disapprove-success').style.opacity = '0';
+          document.getElementById('disapprove-success').style.transition = '0.5s';
+          setTimeout(() => document.getElementById('disapprove-success').remove(), 500);
+        }, 3000);
+      </script>
+    <?php endif; ?>
+
     <!-- SECCIÓN DE USUARIOS PENDIENTES (AHORA DE PRIMERO) -->
     <?php
     $pending_users = get_users([
         'meta_key'     => 'kf_user_approval',
         'meta_value'   => 'approved',
         'meta_compare' => '!=',
+        'role'         => 'subscriber'
+    ]);
+
+    $approved_users = get_users([
+        'meta_key'     => 'kf_user_approval',
+        'meta_value'   => 'approved',
         'role'         => 'subscriber'
     ]);
     ?>
@@ -353,15 +464,52 @@ get_header();
       </div>
     </div>
 
+    <!-- SECCIÓN DE USUARIOS APROBADOS -->
+    <div class="panel-section" style="margin-bottom: 40px;">
+      <div class="section-title" style="background: #1a2a1a;">
+        ✅ USUARIOS APROBADOS
+        <?php if(!empty($approved_users)): ?>
+          <span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; margin-left: 10px;"><?php echo count($approved_users); ?> APROBADOS</span>
+        <?php endif; ?>
+      </div>
+      <div class="plans-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1px; background: var(--kf-line);">
+        <?php
+        if (!empty($approved_users)) :
+            foreach ($approved_users as $a_user) :
+                ?>
+                <div class="plan-list-item" style="background: var(--kf-card); border-bottom: none;">
+                  <div class="plan-info">
+                    <h3 style="font-size: 14px;"><?php echo esc_html($a_user->display_name); ?></h3>
+                    <p class="user-meta-info">📧 <?php echo esc_html($a_user->user_email); ?></p>
+                  </div>
+                  <div>
+                    <form method="POST">
+                      <input type="hidden" name="action" value="kf_disapprove_user">
+                      <input type="hidden" name="user_id" value="<?php echo $a_user->ID; ?>">
+                      <button type="submit" class="btn-disapprove" onclick="return confirm('¿Estás seguro de desactivar este usuario?')">Desactivar</button>
+                    </form>
+                  </div>
+                </div>
+                <?php
+            endforeach;
+        else :
+            echo "<div style='grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--kf-gray); font-size: 13px; background: var(--kf-card);'>No hay usuarios aprobados.</div>";
+        endif;
+        ?>
+      </div>
+    </div>
+
     <div class="grid-coach">
       
       <div class="panel-section">
         <div class="section-title">📂 GESTIONAR PLANES DE ATLETAS</div>
         <div class="plans-container">
           <?php
+          $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
           $query_planes = new WP_Query([
               'post_type' => 'mi-plan',
-              'posts_per_page' => 10,
+              'posts_per_page' => 5,
+              'paged' => $paged,
               'orderby' => 'date',
               'order' => 'DESC'
           ]);
@@ -417,6 +565,52 @@ get_header();
           else :
               echo "<p style='padding: 40px; text-align: center; color: var(--kf-gray);'>No hay planes creados todavía.</p>";
           endif;
+          
+          // Paginación
+          if ($query_planes->max_num_pages > 1) : ?>
+            <div class="pagination-wrapper">
+              <div class="pagination">
+                <?php 
+                $current_page = max(1, $paged);
+                $total_pages = $query_planes->max_num_pages;
+                
+                // Botón anterior
+                if ($current_page > 1) {
+                    echo '<a href="' . esc_url(get_pagenum_link($current_page - 1)) . '" class="pagination-btn prev-btn">← Anterior</a>';
+                }
+                
+                // Números de página
+                $start_page = max(1, $current_page - 2);
+                $end_page = min($total_pages, $current_page + 2);
+                
+                if ($start_page > 1) {
+                    echo '<a href="' . esc_url(get_pagenum_link(1)) . '" class="pagination-btn">1</a>';
+                    if ($start_page > 2) {
+                        echo '<span class="pagination-dots">...</span>';
+                    }
+                }
+                
+                for ($i = $start_page; $i <= $end_page; $i++) {
+                    $class = ($i == $current_page) ? 'pagination-btn active' : 'pagination-btn';
+                    echo '<a href="' . esc_url(get_pagenum_link($i)) . '" class="' . $class . '">' . $i . '</a>';
+                }
+                
+                if ($end_page < $total_pages) {
+                    if ($end_page < $total_pages - 1) {
+                        echo '<span class="pagination-dots">...</span>';
+                    }
+                    echo '<a href="' . esc_url(get_pagenum_link($total_pages)) . '" class="pagination-btn">' . $total_pages . '</a>';
+                }
+                
+                // Botón siguiente
+                if ($current_page < $total_pages) {
+                    echo '<a href="' . esc_url(get_pagenum_link($current_page + 1)) . '" class="pagination-btn next-btn">Siguiente →</a>';
+                }
+                ?>
+              </div>
+            </div>
+          <?php endif;
+          wp_reset_postdata();
           ?>
         </div>
       </div>
@@ -429,12 +623,41 @@ get_header();
             
             <div class="form-group">
               <label class="form-label">Seleccionar Atleta</label>
-              <select name="user_id" class="kf-select" required>
+              <select name="user_id" id="user_id" class="kf-select" required>
                 <option value="">Buscar atleta...</option>
                 <?php 
+                // Obtener todos los suscriptores
                 $subscribers = get_users(['role' => 'subscriber']);
+                
+                // Obtener todos los planes existentes para excluir atletas con plan
+                $existing_plans = new WP_Query([
+                    'post_type' => 'mi-plan',
+                    'posts_per_page' => -1,
+                    'fields' => 'ids'
+                ]);
+                
+                $atletas_con_plan = [];
+                if ($existing_plans->have_posts()) {
+                    foreach ($existing_plans->posts as $plan_id) {
+                        $atleta_id = get_field('cliente', $plan_id);
+                        if ($atleta_id) {
+                            $atletas_con_plan[] = $atleta_id;
+                        }
+                    }
+                }
+                
+                // Mostrar solo suscriptores sin plan
                 foreach($subscribers as $sub) {
-                    echo "<option value='{$sub->ID}'>" . esc_html($sub->display_name) . "</option>";
+                    if (!in_array($sub->ID, $atletas_con_plan)) {
+                        echo "<option value='{$sub->ID}' data-email='" . esc_attr($sub->user_email) . "'>" . esc_html($sub->display_name) . "</option>";
+                    }
+                }
+                
+                // Si no hay suscriptores disponibles, mostrar opción deshabilitada
+                if (empty(array_filter($subscribers, function($sub) use ($atletas_con_plan) {
+                    return !in_array($sub->ID, $atletas_con_plan);
+                }))) {
+                    echo "<option value='' disabled>Todos los suscriptores ya tienen un plan asignado</option>";
                 }
                 ?>
               </select>
@@ -442,16 +665,20 @@ get_header();
 
             <div class="form-group">
               <label class="form-label">Objetivo del Plan</label>
-              <input type="text" name="objetivo" class="kf-input" placeholder="Ej: Fase de Volumen" required>
+              <input type="hidden" name="objetivo" id="objetivo" required>
+              <input type="text" name="objetivo_label" id="objetivo_label" class="kf-input" placeholder="Selecciona un atleta para cargar su objetivo" readonly required>
+              <div id="objetivo-info" style="font-size: 11px; color: var(--kf-orange); margin-top: 5px; display: none;">
+                ⚡ Objetivo registrado en encuesta: <strong id="objetivo-valor"></strong>
+              </div>
             </div>
 
             <div class="form-group">
               <label class="form-label">Nivel de Intensidad</label>
-              <select name="nivel" class="kf-select" required>
-                <option value="principiante">Principiante</option>
-                <option value="intermedio">Intermedio</option>
-                <option value="avanzado">Avanzado</option>
-              </select>
+              <input type="hidden" name="nivel" id="nivel" required>
+              <input type="text" name="nivel_label" id="nivel_label" class="kf-input" placeholder="Selecciona un atleta para determinar el nivel" readonly required>
+              <div id="nivel-info" style="font-size: 11px; color: var(--kf-orange); margin-top: 5px; display: none;">
+                ⚡ Nivel de actividad registrado: <strong id="nivel-valor"></strong>
+              </div>
             </div>
 
             <button type="submit" class="btn-create">GENERAR ESTRUCTURA</button>
@@ -462,5 +689,145 @@ get_header();
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userSelect = document.getElementById('user_id');
+    const objetivoInput = document.getElementById('objetivo');
+    const objetivoLabelInput = document.getElementById('objetivo_label');
+    const nivelSelect = document.getElementById('nivel');
+    const nivelLabelInput = document.getElementById('nivel_label');
+    const objetivoInfo = document.getElementById('objetivo-info');
+    const nivelInfo = document.getElementById('nivel-info');
+    const objetivoValor = document.getElementById('objetivo-valor');
+    const nivelValor = document.getElementById('nivel-valor');
+    const submitButton = document.querySelector('.btn-create');
+
+    // Initially disable submit button
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.5';
+    submitButton.style.cursor = 'not-allowed';
+
+    userSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const userEmail = selectedOption.getAttribute('data-email');
+        
+        if (userEmail && this.value) {
+            // Fetch user data via WordPress AJAX
+            fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>?action=kf_get_user_survey_data&email=' + encodeURIComponent(userEmail))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const payload = data.data;
+                        // Update objetivo field
+                        if (payload.goal) {
+                            objetivoInput.value = payload.goal;
+                            const goalLabels = {
+                                'lose_fat': 'Perder Grasa',
+                                'gain_muscle': 'Ganar Músculo',
+                                'recomposition': 'Recomposición Corporal',
+                                'strength': 'Fuerza',
+                                'endurance': 'Resistencia',
+                                'maintenance': 'Mantenimiento'
+                            };
+                            const goalLabel = goalLabels[payload.goal] || payload.goal;
+                            objetivoLabelInput.value = goalLabel;
+                            objetivoValor.textContent = goalLabel;
+                            objetivoInfo.style.display = 'block';
+                        } else {
+                            objetivoInput.value = '';
+                            objetivoLabelInput.value = '';
+                            objetivoInfo.style.display = 'none';
+                        }
+                        
+                        // Update nivel field based on activity_level
+                        if (payload.activity_level) {
+                            let nivelMap = {
+                                'sedentary': 'principiante',
+                                'light': 'principiante', 
+                                'moderate': 'intermedio',
+                                'active': 'intermedio',
+                                'very_active': 'avanzado'
+                            };
+                            
+                            const mappedNivel = nivelMap[payload.activity_level] || 'intermedio';
+                            nivelSelect.value = mappedNivel;
+                            
+                            // Show activity level info
+                            const activityLabels = {
+                                'sedentary': 'Sedentario',
+                                'light': 'Ligero',
+                                'moderate': 'Moderado', 
+                                'high': 'Alto',
+                                'active': 'Alto',
+                                'very_active': 'Muy Alto'
+                            };
+
+                            // En pantalla mostramos el nivel original del formulario (activity_level)
+                            nivelLabelInput.value = activityLabels[payload.activity_level] || payload.activity_level;
+                            
+                            nivelValor.textContent = activityLabels[payload.activity_level] || payload.activity_level;
+                            nivelInfo.style.display = 'block';
+                            
+                            // Enable submit button
+                            submitButton.disabled = false;
+                            submitButton.style.opacity = '1';
+                            submitButton.style.cursor = 'pointer';
+                        } else {
+                            nivelSelect.value = '';
+                            nivelLabelInput.value = '';
+                            nivelInfo.style.display = 'none';
+                            
+                            // Keep submit button disabled if no activity level
+                            submitButton.disabled = true;
+                            submitButton.style.opacity = '0.5';
+                            submitButton.style.cursor = 'not-allowed';
+                        }
+                    } else {
+                        // Reset fields if no data found
+                        objetivoInput.value = '';
+                        objetivoLabelInput.value = '';
+                        nivelSelect.value = '';
+                        nivelLabelInput.value = '';
+                        objetivoInfo.style.display = 'none';
+                        nivelInfo.style.display = 'none';
+                        
+                        // Keep submit button disabled
+                        submitButton.disabled = true;
+                        submitButton.style.opacity = '0.5';
+                        submitButton.style.cursor = 'not-allowed';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                    objetivoInput.value = '';
+                    objetivoLabelInput.value = '';
+                    nivelSelect.value = '';
+                    nivelLabelInput.value = '';
+                    objetivoInfo.style.display = 'none';
+                    nivelInfo.style.display = 'none';
+                    
+                    // Keep submit button disabled
+                    submitButton.disabled = true;
+                    submitButton.style.opacity = '0.5';
+                    submitButton.style.cursor = 'not-allowed';
+                });
+        } else {
+            // Reset fields when no user selected
+            objetivoInput.value = '';
+            objetivoLabelInput.value = '';
+            nivelSelect.value = '';
+            nivelLabelInput.value = '';
+            objetivoInfo.style.display = 'none';
+            nivelInfo.style.display = 'none';
+            
+            // Disable submit button
+            submitButton.disabled = true;
+            submitButton.style.opacity = '0.5';
+            submitButton.style.cursor = 'not-allowed';
+        }
+    });
+});
+</script>
 
 <?php get_footer(); ?>
