@@ -1,0 +1,9 @@
+# Ignorar carpetas pesadas y datos
+wp_data/
+wp_data_backup/
+backups_freddy/
+temp_repo/
+
+# Ignorar configuración sensible
+.env
+*.log

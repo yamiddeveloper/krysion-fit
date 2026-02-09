@@ -1,0 +1,12 @@
+[08-Feb-2026 07:32:54 UTC] Intentando login para: admin@kry.com
+[08-Feb-2026 18:33:29 UTC] Automatic updates starting...
+[08-Feb-2026 18:33:30 UTC]   Automatic theme updates starting...
+[08-Feb-2026 18:33:30 UTC]   Automatic theme updates complete.
+[08-Feb-2026 18:33:30 UTC] Automatic updates complete.
+[09-Feb-2026 00:30:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-config.php:49) in /var/www/html/wp-includes/pluggable.php on line 1531
+[09-Feb-2026 00:30:30 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-config.php:49) in /var/www/html/wp-includes/pluggable.php on line 1534
+[09-Feb-2026 00:31:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /var/www/html/wp-content/themes/hello-elementor/page-inicio-personalizado.php on line 3
+[09-Feb-2026 00:35:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-config.php:49) in /var/www/html/wp-includes/pluggable.php on line 1531
+[09-Feb-2026 00:35:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-config.php:49) in /var/www/html/wp-includes/pluggable.php on line 1534
+[09-Feb-2026 00:36:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /var/www/html/wp-content/themes/hello-elementor/page-inicio-personalizado.php on line 3
+[09-Feb-2026 00:44:12 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /var/www/html/wp-content/themes/hello-elementor/page-inicio-personalizado.php on line 3

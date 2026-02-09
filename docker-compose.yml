@@ -1,0 +1,64 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: wp_mysql
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: --innodb_buffer_pool_size=1G --innodb_log_file_size=256M --innodb_flush_log_at_trx_commit=2 --innodb_flush_method=O_DIRECT --max_connections=200 --skip-name-resolve
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wpnet
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wp_app
+    env_file: .env
+    environment:
+      VIRTUAL_HOST: ${VIRTUAL_HOST}
+      VIRTUAL_PORT: ${VIRTUAL_PORT}
+      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'https://krysionfit.com');
+        define('WP_SITEURL', 'https://krysionfit.com');
+        define('WP_CACHE', true);
+        define('WP_POST_REVISIONS', 3);
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            $_SERVER['HTTPS'] = 'on';
+        }
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    volumes:
+      - /docker/krysionfit/wp_data:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - wpnet
+      - nginx-proxy_default
+
+  redis:
+    image: redis:alpine
+    container_name: wp_redis
+    restart: unless-stopped
+    networks:
+      - wpnet
+
+networks:
+  wpnet:
+    driver: bridge
+  nginx-proxy_default:
+    external: true
+
+volumes:
+  db_data:
