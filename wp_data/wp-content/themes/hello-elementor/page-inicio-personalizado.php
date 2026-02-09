@@ -9,7 +9,7 @@ if (!session_id()) {
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title><?php wp_title('|', true, 'right'); bloginfo('name'); ?></title>
+    <title><?php wp_title('|', true, 'right'); bloginfo('name'); ?> | Planes de entrenamiento personalizados</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -133,7 +133,7 @@ nav .btn-area:hover {
     radial-gradient(circle at 10% 20%, rgba(242, 96, 12, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(242, 96, 12, 0.05) 0%, transparent 40%),
     linear-gradient(rgba(13,13,13,0.72), rgba(13,13,13,0.92)),
-    url('wp_data/wp-content/uploads/2026/01/krysion-fit-1-e1768434069279.jpeg');
+    url('/wp-content/uploads/2026/02/krysion-fit (1).jpeg');
   background-size: cover;
   background-position: center 67%; 
   overflow:hidden;
@@ -712,7 +712,6 @@ footer a:hover{
     padding: 130px 0 110px;
     background:
     linear-gradient(rgba(13,13,13,0.72), rgba(13,13,13,0.88)),
-    url('/wp-content/uploads/2026/01/krysion-fit-1-e1768434069279.jpeg');
     background-size: cover;
     background-position: center 50%; /* Cambiado de 70% a 20% para subir la imagen y que se vea lo de abajo */
     background-attachment: fixed; 
@@ -804,7 +803,7 @@ footer a:hover{
 
       <div class="stats">
         <div class="stat">
-          <h3>4</h3>
+          <h3>5</h3>
           <p>Entrenadores</p>
         </div>
         <div class="stat">
@@ -827,20 +826,20 @@ footer a:hover{
       <div class="coach-card">
         <div class="coach-inner">
           <div class="coach-tag"><span></span> Head Coach</div>
-          <img src="/wp-content/uploads/2026/01/WhatsApp-Image-2026-01-13-at-1.18.38-AM.jpeg"
+          <img src="/wp-content/uploads/2026/02/WhatsApp Image 2026-01-13 at 1.18.38 AM.jpeg"
                alt="Freddy Zapata - Entrenador Certificado">
-          <h3>Freddy Zapata</h3>
-          <p>Experto en recomposición corporal y perdida de peso</p>
-          <a href="/wp-content/uploads/2026/01/INSTRUCTORADO-PERSONAL-TRAINER-Y-MUSCULACION-1.pdf" target="_blank" class="btn-small">Ver certificado</a>
+          <h3>Vicente Silva</h3>
+          <p>Experto en perder grasa y definir abdomen</p>
+          <a href="/wp-content/uploads/2026/02/INSTRUCTORADO-PERSONAL-TRAINER-Y-MUSCULACION (1).pdf" target="_blank" class="btn-small">Ver certificado</a>
         </div>
       </div>
       <div class="coach-card" style="margin-top: 20px;">
         <div class="coach-inner">
           <div class="coach-tag"><span></span> Coach</div>
-          <img src="/wp-content/uploads/2026/01/entrenador-2.jpeg"
+          <img src="/wp-content/uploads/2026/02/entrenador-2.jpeg"
                alt="Entrenador Krysion Fit">
           <h3>Anthony Vargas</h3>
-          <p>Experto en entrenamiento funcional</p>
+          <p>Experto en entrenamiento funcional en casa</p>
           <a href="https://www.instagram.com/daddithoni?igsh=MTkwanhxbTN3eTQyNA==" target="_blank" class="btn-small">Ver perfil</a>
         </div>
       </div>
@@ -852,7 +851,7 @@ footer a:hover{
   <div class="container">
     <div class="section-title">
       <h2>¿Cómo funciona la asesoría?</h2>
-      <p>Un proceso claro y acompañado para que no te pierdas en el camino y veas cambios reales en tu cuerpo.</p>
+      <p>Un proceso claro con acompañamiento para perder grasa, evitar la flacidez y efecto rebote</p>
     </div>
     <div class="steps-grid">
       <div class="step-card">
@@ -861,8 +860,7 @@ footer a:hover{
           <h3>Nos cuentas tu situación</h3>
         </div>
         <p>
-          Te contactas por WhatsApp, respondes unas preguntas simples y nos muestras tu punto de partida:
-          objetivos, horarios y experiencia entrenando.
+          Completas el formulario (5 min), agendas tu primera videollamada (15 min) y se analiza tu punto de partida
         </p>
       </div>
       <div class="step-card">
@@ -871,8 +869,7 @@ footer a:hover{
           <h3>Diseñamos tu plan a medida</h3>
         </div>
         <p>
-          Un entrenador humano arma tu plan de entrenamiento y nutrición según tu cuerpo, tiempo disponible y contexto real,
-          sin PDFs genéricos ni rutinas copiadas.
+          Un entrenador humano arma tu plan de entrenamiento y nutrición según tu cuerpo, tiempo disponible y contexto real
         </p>
       </div>
       <div class="step-card">
@@ -881,8 +878,8 @@ footer a:hover{
           <h3>Seguimiento y ajustes semanales</h3>
         </div>
         <p>
-          Hacemos check-in, revisamos tu progreso, resolvemos dudas y ajustamos el plan para que avances sin estancarte
-          ni abandonar a la mitad.
+          Se programa un check-in semanal (1 videollamada 15 min), revisamos tu progreso, resolvemos dudas y ajustamos el plan para que avances sin estancarte
+          ni abandonar a la mitad. Tu constancia te permite competir por premios valorizados en 300 soles o 90 dólares
         </p>
       </div>
     </div>
@@ -897,18 +894,18 @@ footer a:hover{
     <div class="cards">
       <div class="plan">
         <h3>KRYSION BASE</h3>
-        <p class="price">S/60 o $18</p>
-        <small>30 días completos</small>
+        <p class="price">S/20 o $6</p>
+        <small>45 días completos</small>
         <div class="rec">
-          Ideal si tienes disciplina, poco presupuesto y solo necesitas instrucciones claras para seguir un buen plan.
+          Ideal si necesitas instrucciones claras para perder el máximo de grasa en 45 días
         </div>
         <ul>
           <li>Plan de entrenamiento y nutrición hecho a medida por un entrenador humano</li>
-          <li>Acceso a plataforma digital con tu rutina, nutrición y foro de preguntas</li>
+          <li>Acceso a plataforma digital con tu rutina, nutrición, trackers monitoreo y foro de preguntas</li>
           <li>Seguimiento por WhatsApp para resolver dudas generales</li>
         </ul>
         <div class="diff">
-          💡 <strong>Diferenciación:</strong> No trabajamos con PDFs genéricos ni IA. Tu plan se arma pensando en tu contexto real, horarios y nivel.
+          💡 <strong>Diferenciación:</strong> No trabajamos con PDFs ni IA. Tu plan se arma pensando en tu contexto real, horarios y nivel.
         </div>
         <a href="/encuesta?plan=KRYSION+BASE&price=18" class="btn btn-green">Quiero este plan</a>
       </div>
@@ -916,22 +913,21 @@ footer a:hover{
       <div class="plan">
         <span class="badge-plan">Más elegido</span>
         <h3>KRYSION PLUS</h3>
-        <p class="price">S/120 o $36</p>
-        <small>30 días completos</small>
+        <p class="price">S/60 o $18</p>
+        <small>45 días completos</small>
         <div class="rec">
-          Para quienes valoran su tiempo y quieren resultados visibles con acompañamiento constante y correcciones directas.
+          Ideal si necesitas guía constante
         </div>
         <ul>
           <li>Todo lo de Krysion Base</li>
           <li>1 videollamada semanal (15 min) para ver tu físico y tomar medidas</li>
-          <li>Ajuste de tus alimentos 2 veces por semana para mantener tu plan calórico</li>
-          <li>Check-in 1 vez por semana</li>
+          <li>Ajuste de tus comidas para mantener tu plan calórico</li>
           <li>Corrección y feedback de tus ejercicios en video</li>
           <li>Consejos y tips nutricionales específicos según tu caso</li>
-          <li>Acceso a grupo de WhatsApp con motivación, premios y conocimientos fitness</li>
+          <li>Acceso a grupo de competición sana por premios, y llegar a su mejor versión de forma acompañada</li>
         </ul>
         <div class="diff">
-          💡 <strong>Diferenciación:</strong> Tienes un entrenador real pendiente de ti. Cada semana revisamos tu proceso y hacemos ajustes para que no te estanques.
+          💡 <strong>Diferenciación:</strong> Tienes un monitoreo más minucioso. Cada semana revisamos tu proceso y hacemos ajustes para que no te estanques.
         </div>
         <a href="/encuesta?plan=KRYSION+PLUS&price=36" class="btn btn-green">Quiero este plan</a>
       </div>
@@ -939,21 +935,18 @@ footer a:hover{
       <div class="plan">
         <h3>KRYSION ELITE</h3>
         <p class="price">S/370 o $109</p>
-        <small>5 semanas (37 días)</small>
+        <small>50 días</small>
         <div class="rec">
-          Para quienes quieren la experiencia completa: instrucción presencial, corrección en vivo y un acompañamiento minucioso.
+          Para quienes desean la experiencia presencial
         </div>
         <ul>
           <li>Todo lo de Krysion Plus</li>
           <li>Entrevista inicial vía Zoom para analizar tu estilo de vida</li>
           <li>Entrenamientos presenciales coordinados según tu horario</li>
-          <li>Plan nutricional ajustado semanalmente</li>
-          <li>Respuestas rápidas (menos de 20 min)</li>
-          <li>Recomendación de suplementos segura y personalizada</li>
-          <li>1 clase online grupal con temas de progreso fitness</li>
+          <li>1 clase online con temas de progreso en calistenia</li>
         </ul>
         <div class="diff">
-          💡 <strong>Diferenciación:</strong> Todo el sistema se adapta a ti: horarios, nivel y objetivos. Diseñado para que avances sin excusas.
+          💡 <strong>Diferenciación:</strong> Entrenamiento Presencial 1-1
         </div>
         <a href="/encuesta?plan=KRYSION+ELITE&price=109" class="btn btn-green">Quiero este plan</a>
       </div>
@@ -966,9 +959,9 @@ footer a:hover{
     <div class="whatsapp-box">
       <h2>📱 Acceso al grupo privado de WhatsApp</h2>
       <p>
-        Recibe motivación diaria, tips fitness, retos, sorteos y comparte tu progreso con personas que también están transformando su cuerpo.
+        Recibe mentoría diaria, tips fitness, retos de 10 días y comparte tu progreso con personas que también están transformando su cuerpo igual qur tú.
       </p>
-      <div class="price">$3 USD</div>
+      <div class="price">$5 USD</div>
       <div class="opts">
         ✅ Disponible para todo el mundo &nbsp;&nbsp; ⚡ Acceso inmediato
       </div>
@@ -992,7 +985,7 @@ footer a:hover{
         <div class="content">
           <h3>Ácido Alfa-Lipoico (ALA)</h3>
           <p>Suplemento antioxidante que apoya el metabolismo energético, la función nerviosa y el rendimiento físico.</p>
-          <div class="price">$55 USD</div>
+          <div class="price">S/185 O $55 USD</div>
           <small>+ Costo de envío</small><br>
           <span class="tag">⚠ Solo disponible en Perú</span>
           <a href="/encuesta?plan=ALA+NATUREBELL&price=55" target="_blank" class="btn btn-green">Comprar ahora</a>
@@ -1006,7 +999,7 @@ footer a:hover{
         <div class="content">
           <h3>Collar de colmillo 🦾</h3>
           <p>Cadena con colgante de colmillo y cabeza de lobo. Un accesorio con estilo oscuro para acompañarte en tus entrenamientos.</p>
-          <div class="price">$8 USD</div>
+          <div class="price">S/47 o $14 USD</div>
           <small>+ Costo de envío</small><br>
           <span class="tag">⚠ Solo disponible en Perú</span>
           <a href="/encuesta?plan=COLLAR+COLMILLO&price=8" target="_blank" class="btn btn-green">Comprar ahora</a>
@@ -1030,7 +1023,7 @@ footer a:hover{
 
 <footer>
   <div class="logo" style="font-style: italic; font-weight: bold;">KRYSION FIT</div>
-  <p>Transformando vidas, un entrenamiento a la vez.</p>
+  <p>Transformando cuerpos</p>
   <p>
     <a href="#top">Inicio</a>·
     <a href="#coach">Coach</a>·

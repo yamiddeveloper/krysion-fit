@@ -5,7 +5,7 @@ define( 'DB_NAME', 'wordpress' );
 define( 'DB_USER', 'wp_user' );
 define( 'DB_PASSWORD', 'Tumaiwaraka100' );
 define( 'DB_HOST', 'db' );
-define( 'DB_CHARSET', 'utf8' );
+define( 'DB_CHARSET', 'utf8mb4' );
 define( 'DB_COLLATE', '' );
 
 /** Llaves de Seguridad (Valores fijos para evitar errores de función) */

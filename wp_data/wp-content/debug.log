@@ -10,3 +10,59 @@
 [09-Feb-2026 00:35:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /var/www/html/wp-config.php:49) in /var/www/html/wp-includes/pluggable.php on line 1534
 [09-Feb-2026 00:36:17 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /var/www/html/wp-content/themes/hello-elementor/page-inicio-personalizado.php on line 3
 [09-Feb-2026 00:44:12 UTC] PHP Warning:  session_start(): Session cannot be started after headers have already been sent in /var/www/html/wp-content/themes/hello-elementor/page-inicio-personalizado.php on line 3
+[09-Feb-2026 02:04:25 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[09-Feb-2026 02:11:40 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[09-Feb-2026 02:18:31 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[09-Feb-2026 02:39:17 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo for db failed: Temporary failure in name resolution in /var/www/html/wp-includes/class-wpdb.php on line 1994
+[09-Feb-2026 02:39:43 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo for db failed: Temporary failure in name resolution in /var/www/html/wp-includes/class-wpdb.php on line 1994
+[09-Feb-2026 03:22:45 UTC] Automatic updates starting...
+[09-Feb-2026 03:22:46 UTC]   Automatic theme updates starting...
+[09-Feb-2026 03:22:46 UTC]   Automatic theme updates complete.
+[09-Feb-2026 03:22:46 UTC] Automatic updates complete.
+[09-Feb-2026 06:34:50 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[09-Feb-2026 06:46:31 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[09-Feb-2026 15:18:21 UTC] Automatic updates starting...
+[09-Feb-2026 15:18:22 UTC]   Automatic theme updates starting...
+[09-Feb-2026 15:18:22 UTC]   Automatic theme updates complete.
+[09-Feb-2026 15:18:22 UTC] Automatic updates complete.
+[09-Feb-2026 18:31:26 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[09-Feb-2026 22:12:43 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo for db failed: Temporary failure in name resolution in /var/www/html/wp-includes/class-wpdb.php on line 1994
+[09-Feb-2026 22:12:45 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo for db failed: Temporary failure in name resolution in /var/www/html/wp-includes/class-wpdb.php on line 1994
+[09-Feb-2026 22:13:02 UTC] PHP Warning:  mysqli_real_connect(): php_network_getaddresses: getaddrinfo for db failed: Temporary failure in name resolution in /var/www/html/wp-includes/class-wpdb.php on line 1994
+[09-Feb-2026 22:13:05 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): php_network_getaddresses: getaddrinfo for db failed: Temporary failure in name resolution in /var/www/html/wp-includes/class-wpdb.php on line 1994

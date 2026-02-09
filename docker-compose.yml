@@ -2,7 +2,6 @@ services:
   db:
     image: mysql:8.0
     container_name: wp_mysql
-    env_file: .env
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -18,21 +17,16 @@ services:
   wordpress:
     image: wordpress:latest
     container_name: wp_app
-    env_file: .env
     environment:
-      VIRTUAL_HOST: ${VIRTUAL_HOST}
-      VIRTUAL_PORT: ${VIRTUAL_PORT}
-      LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      EDITOR_PASSWORD: ${EDITOR_PASSWORD}
       WORDPRESS_CONFIG_EXTRA: |
-        define('WP_HOME', 'https://krysionfit.com');
-        define('WP_SITEURL', 'https://krysionfit.com');
+        define('WP_HOME', 'https://www.krysionfit.com');
+        define('WP_SITEURL', 'https://www.krysionfit.com');
         define('WP_CACHE', true);
-        define('WP_POST_REVISIONS', 3);
         if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
             $_SERVER['HTTPS'] = 'on';
         }
@@ -46,13 +40,6 @@ services:
     networks:
       - wpnet
       - nginx-proxy_default
-
-  redis:
-    image: redis:alpine
-    container_name: wp_redis
-    restart: unless-stopped
-    networks:
-      - wpnet
 
 networks:
   wpnet:

@@ -98,7 +98,7 @@ get_header(); ?>
   }
   
   .login-wrapper {
-      min-height: 80vh;
+      min-height: 90vh;
       display: flex;
       align-items: center;
       justify-content: center;

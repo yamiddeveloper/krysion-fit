@@ -572,7 +572,7 @@ textarea {
     <!-- ========== PANTALLA DE ÉXITO ========== -->
     <div class="phone-frame" style="min-height: auto; padding-bottom: 40px;">
         <div class="logo-header">
-            <img src="/wp-content/uploads/2025/09/favicon.png" alt="Krysion Fit">
+            <img src="/wp-content/uploads/2026/02/cropped-favicon.png" alt="Krysion Fit">
         </div>
         
         <div style="text-align:center; margin-top: 10px;">
@@ -615,7 +615,7 @@ textarea {
     <!-- ========== FORMULARIO PRINCIPAL ========== -->
     <div class="phone-frame">
         <div class="logo-header">
-            <img src="/wp-content/uploads/2025/09/favicon.png" alt="Krysion Fit">
+            <img src="/wp-content/uploads/2026/02/cropped-favicon.png" alt="Krysion Fit">
         </div>
 
 

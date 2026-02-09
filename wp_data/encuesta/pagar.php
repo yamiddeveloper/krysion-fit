@@ -154,7 +154,7 @@ $plan_price = $_GET['price'] ?? ($_SESSION['chosen_price'] ?? '18');
 
     <div class="payment-card">
         <div class="logo-box">
-            <img src="/wp-content/uploads/2025/09/favicon.png" alt="Krysion Fit">
+            <img src="/wp-content/uploads/2026/02/cropped-favicon.png" alt="Krysion Fit">
         </div>
         
         <span class="plan-badge">Activar suscripción</span>
