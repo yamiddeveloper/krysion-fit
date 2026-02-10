@@ -879,7 +879,7 @@ footer a:hover{
         </div>
         <p>
           Se programa un check-in semanal (1 videollamada 15 min), revisamos tu progreso, resolvemos dudas y ajustamos el plan para que avances sin estancarte
-          ni abandonar a la mitad. Tu constancia te permite competir por premios valorizados en 300 soles o 90 dólares
+          ni abandonar a la mitad. Tu constancia te permite competir por premios valorizados en 300 soles - 90 dólares
         </p>
       </div>
     </div>
@@ -959,7 +959,7 @@ footer a:hover{
     <div class="whatsapp-box">
       <h2>📱 Acceso al grupo privado de WhatsApp</h2>
       <p>
-        Recibe mentoría diaria, tips fitness, retos de 10 días y comparte tu progreso con personas que también están transformando su cuerpo igual qur tú.
+        Recibe mentoría diaria, tips fitness, retos de 10 días y comparte tu progreso con personas que también están transformando su cuerpo igual que tú.
       </p>
       <div class="price">$5 USD</div>
       <div class="opts">
@@ -983,7 +983,7 @@ footer a:hover{
           <img src="/wp-content/uploads/2025/10/ea563866-fd9f-4552-8a46-09270d8075b9.jpeg" alt="Alpha Lipoic Acid Naturebell">
         </div>
         <div class="content">
-          <h3>Ácido Alfa-Lipoico (ALA)</h3>
+          <h3>🧠 Ácido Alfa-Lipoico (ALA)</h3>
           <p>Suplemento antioxidante que apoya el metabolismo energético, la función nerviosa y el rendimiento físico.</p>
           <div class="price">S/185 O $55 USD</div>
           <small>+ Costo de envío</small><br>
