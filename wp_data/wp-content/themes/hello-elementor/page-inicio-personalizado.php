@@ -8,7 +8,8 @@ if (!session_id()) {
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="icon" href="wp-content/uploads/2026/02/cropped-favicon.png" type="image/png">
+    <meta name="description" content="Planes de entrenamiento personalizados para perder peso y ganar masa muscular">
     <title><?php wp_title('|', true, 'right'); bloginfo('name'); ?> | Planes de entrenamiento personalizados</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 

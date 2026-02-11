@@ -70,3 +70,18 @@ Stack trace:
 [10-Feb-2026 03:41:26 UTC]   Automatic theme updates starting...
 [10-Feb-2026 03:41:26 UTC]   Automatic theme updates complete.
 [10-Feb-2026 03:41:26 UTC] Automatic updates complete.
+[10-Feb-2026 03:44:27 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_field() in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php:519
+Stack trace:
+#0 /var/www/html/wp-includes/template-loader.php(125): include()
+#1 /var/www/html/wp-blog-header.php(19): require_once('/var/www/html/w...')
+#2 /var/www/html/index.php(17): require('/var/www/html/w...')
+#3 {main}
+  thrown in /var/www/html/wp-content/themes/hello-elementor/page-crear-plan.php on line 519
+[10-Feb-2026 15:17:43 UTC] Automatic updates starting...
+[10-Feb-2026 15:17:43 UTC]   Automatic theme updates starting...
+[10-Feb-2026 15:17:43 UTC]   Automatic theme updates complete.
+[10-Feb-2026 15:17:43 UTC] Automatic updates complete.
+[11-Feb-2026 03:15:25 UTC] Automatic updates starting...
+[11-Feb-2026 03:15:26 UTC]   Automatic theme updates starting...
+[11-Feb-2026 03:15:26 UTC]   Automatic theme updates complete.
+[11-Feb-2026 03:15:26 UTC] Automatic updates complete.
